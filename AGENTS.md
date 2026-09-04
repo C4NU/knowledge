@@ -164,16 +164,35 @@ Rollie에서는 작업 번호다. 문서를 가로질러 읽을 수 없게 된 �
 
 AI가 매번 같은 경로로 찾아가도록 **방 이름을 프로젝트 간에 통일한다.**
 
+🔴 **대소문자가 성격을 가른다. 소문자는 공통, 대문자는 그 앱 전용이다.**
+이 구분이 "다른 앱에서도 찾을 수 있는 지식인가"를 한눈에 보여준다.
+
 ```
 tech-docs/
 ├── README.md      입구 — 방 목록과 각 방에 무엇이 있는지
-├── build/         빌드·아카이브·서명
-├── store/         ASC·심사·과금·RevenueCat
-├── platform/      OS 분기·Catalyst·버전 대응
+├── build/         빌드·아카이브·서명·생성 스크립트
+├── core/          아키텍처·렌더링 코어·성능
+├── platform/      OS 분기·Catalyst·하드웨어·버전 대응
 ├── data/          저장·마이그레이션
+├── store/         ASC·심사·과금·RevenueCat
 ├── ui/            레이아웃·애니메이션·제스처
-└── <전용>/        그 앱만의 도메인 (예: Paddie의 FRAME·EXPORT·LAYOUT)
+├── product/       제품 방향과 결정 로그 · 정책의 근거
+├── review/        코드리뷰 상세 기록 (목록은 plan/code-review.md)
+└── <전용>/        대문자. 그 앱만의 도메인
 ```
+
+**문서가 없는 방은 만들지 않는다.** 빈 방은 찾는 사람을 헷갈리게 한다.
+
+네 앱의 전용 방은 이렇다.
+
+| 앱 | 전용 방 |
+|---|---|
+| Paddie | `FRAME` · `EXPORT` · `LAYOUT` |
+| Tappie | `EXTENSION` |
+| Nottie | `WIDGET` |
+| Rollie | 아직 없음 |
+
+**문서 이름은 kebab-case로 통일한다.** `snake_case`나 `PascalCase`를 섞지 않는다.
 
 한 문서는 한 주제만 담고, 형식을 고정한다.
 
