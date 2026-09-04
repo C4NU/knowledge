@@ -8,19 +8,46 @@
 
 ## 저장소 지도
 
+최상위는 **성격**으로 가른다. 플랫폼이나 언어로 나누지 않는다 —
+그렇게 하면 한 제품이 여러 폴더로 흩어진다.
+
+| 폴더 | 담는 것 |
+|---|---|
+| `products/` | 출시했거나 만들고 있는 제품 |
+| `libraries/` | 여러 제품이 함께 쓰는 패키지 |
+| `tools/` | 제품을 만들기 위한 내부 도구 |
+| `templates/` | 새 프로젝트를 시작할 때 복사하는 골격 |
+| `knowledge/` | **이 파일과 공통 지식.** AI가 읽는다 |
+| `sandbox/` | 실험·습작 — 다시 손댈 생각이 있는 것 |
+| `reference/` | 남의 코드와 문서. 참고용 |
+| `archive/` | 끝난 것. 보관만 한다 |
+
+### products
+
 | 경로 | 내용 |
 |---|---|
-| `Xcode/Paddie` | 사진 프레임 편집 — Studio Artifakt의 Creative Studio |
-| `Xcode/Tappie` | 하루를 기록하는 비디오 카메라 (1.0 심사 중) |
-| `Xcode/Rollie` | 36컷 일회용 35mm 필름 카메라 (0.8.0 작업 중) |
-| `Xcode/Nottie` | 창작자용 작업 노트 |
-| `Xcode/ARTIFAKT` | 내부 개발용 macOS 렌더링 테스트 앱 (외부 공개 안 함) |
-| `Xcode/ArtifaktCore` | 공용 Swift 패키지 |
-| `Web/Project Hanavi` | 하나비 관련 웹 프로젝트 묶음 |
-| `Python` · `Scripts` · `Dope-Custom` | 도구·스크립트 |
+| `paddie/{ios,android,legacy}` | 사진 프레임 편집 — Creative Studio (2.3.0 심사 중) |
+| `tappie` | 하루를 기록하는 비디오 카메라 (1.1 출시 · 1.2 준비) |
+| `rollie` | 36컷 일회용 35mm 필름 카메라 (0.8.0 작업 중) |
+| `nottie` | 창작자용 작업 노트 (미출시) |
+| `hanavi/{app,schedule,yearbook,docs}` | 하나비 웹 프로젝트 묶음 |
+| `tennysn` | AI 마켓 다이어리 (옛 이름 ai-market-diary) |
 
 Paddie·Tappie·Rollie는 **Studio Artifakt** 제품군이다. 제품 철학과 가격 정책 등
 앱을 가로지르는 문서는 `~/Obsidian/Vault/Studio Artifakt/`에 있다.
+
+### 그 밖
+
+| 경로 | 내용 |
+|---|---|
+| `libraries/artifakt-core` | 공용 Swift 패키지 |
+| `tools/artifakt` | 내부 개발용 macOS 렌더링 테스트 앱 (외부 공개 안 함) |
+| `tools/{toolkits,icon-composer,icon-scripts,ghost-theme-dope}` | 도구·스크립트 |
+| `templates/docs-template` | 문서 골격 |
+
+🔴 **`AGENTS.md`와 `CLAUDE.md`의 실체는 `knowledge/`에 있다.** 루트의 둘은 심볼릭 링크다.
+`knowledge/`가 git 저장소(`studio-artifakt/knowledge`)라서 그렇게 뒀다 — git은 심볼릭
+링크를 내용이 아니라 경로 문자열로 커밋하므로, 실체가 저장소 안에 있어야 백업된다.
 
 ---
 
@@ -289,8 +316,7 @@ Vault에서 편집하면 저장소 원본이 바뀐다. **사본이 아니다** 
 
 ## Git
 
-- **브랜치**: 앱 프로젝트는 `<앱이름>/vX.Y.Z` (예: `rollie/v0.7.0`, `tappie/v1.0.0`).
-  두 앱이 같은 번호를 쓸 수 있으므로 접두사로 가른다.
+- **브랜치**: 앱 프로젝트는 `version/vX.Y.Z` (예: `version/v0.7.0`, `version/v1.0.0`).
 - **커밋 메시지**: `<타입>: <설명>` — `feat` · `fix` · `refactor` · `docs` · `test` ·
   `chore` · `perf` · `ci`. 본문은 선택.
 - **기존 uncommitted 변경을 지우거나 되돌리지 않는다.**
