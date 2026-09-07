@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "source_repository": "studio-artifakt/knowledge",
+  "profiles": {
+    "common": {
+      "blocks": [
+        "instructions/common.md"
+      ],
+      "files": [
+        "instructions/documentation.md"
+      ]
+    },
+    "app": {
+      "blocks": [
+        "instructions/common.md",
+        "instructions/app.md"
+      ],
+      "files": [
+        "instructions/documentation.md"
+      ]
+    },
+    "apple": {
+      "blocks": [
+        "instructions/common.md",
+        "instructions/app.md",
+        "instructions/apple.md"
+      ],
+      "files": [
+        "instructions/documentation.md",
+        "instructions/xcode-release.md",
+        "xcode/xcconfig-precedence.md"
+      ]
+    }
+  },
+  "targets": [
+    {
+      "id": "tennysn",
+      "path": "products/tennysn",
+      "repository": "C4NU/tennysn",
+      "default_branch": "main",
+      "profile": "app",
+      "ci": true
+    },
+    {
+      "id": "artifakt-core",
+      "path": "libraries/artifakt-core",
+      "repository": "studio-artifakt/artifakt-core",
+      "default_branch": "main",
+      "profile": "common",
+      "ci": true
+    },
+    {
+      "id": "hanavi-app",
+      "path": "products/hanavi/app",
+      "repository": "C4NU/hanavi-app",
+      "default_branch": "main",
+      "profile": "app",
+      "ci": true
+    },
+    {
+      "id": "hanavi-schedule",
+      "path": "products/hanavi/schedule",
+      "repository": "C4NU/hanavi_schedule",
+      "default_branch": "main",
+      "profile": "common",
+      "ci": true
+    },
+    {
+      "id": "hanavi-yearbook",
+      "path": "products/hanavi/yearbook",
+      "repository": "C4NU/yearbook",
+      "default_branch": "main",
+      "profile": "common",
+      "ci": true
+    },
+    {
+      "id": "nottie",
+      "path": "products/nottie",
+      "repository": "studio-artifakt/nottie",
+      "default_branch": "main",
+      "profile": "apple",
+      "ci": true,
+      "project_rule": "버전·빌드 번호 정본은 `Configs/Shared.xcconfig`다. pbxproj에 남은 값으로 버전을 판단하지 않는다."
+    },
+    {
+      "id": "paddie-android",
+      "path": "products/paddie/android",
+      "repository": "studio-artifakt/paddie-android",
+      "default_branch": "main",
+      "profile": "app",
+      "ci": true
+    },
+    {
+      "id": "paddie-ios",
+      "path": "products/paddie/ios",
+      "repository": "studio-artifakt/paddie-ios",
+      "default_branch": "main",
+      "profile": "apple",
+      "ci": true,
+      "project_rule": "버전 정본은 `Paddie.xcodeproj/project.pbxproj`다. 플랫폼별 빌드 번호 예외는 아래 프로젝트 규칙을 따른다."
+    },
+    {
+      "id": "paddie-legacy",
+      "path": "products/paddie/legacy",
+      "repository": "C4NU/Paddie",
+      "default_branch": "main",
+      "profile": "common",
+      "ci": false
+    },
+    {
+      "id": "rollie",
+      "path": "products/rollie",
+      "repository": "studio-artifakt/rollie",
+      "default_branch": "rollie/v0.7.0",
+      "profile": "apple",
+      "ci": true,
+      "project_rule": "버전·빌드 번호 정본은 `Configs/Shared.xcconfig`다. pbxproj에 남은 값으로 버전을 판단하지 않는다."
+    },
+    {
+      "id": "tappie",
+      "path": "products/tappie",
+      "repository": "studio-artifakt/tappie",
+      "default_branch": "main",
+      "profile": "apple",
+      "ci": true,
+      "project_rule": "버전·빌드 번호 정본은 `Configs/Shared.xcconfig`다. pbxproj에 남은 값으로 버전을 판단하지 않는다."
+    },
+    {
+      "id": "docs-template",
+      "path": "templates/docs-template",
+      "repository": "C4NU/Docs",
+      "default_branch": "main",
+      "profile": "common",
+      "ci": true
+    },
+    {
+      "id": "artifakt",
+      "path": "tools/artifakt",
+      "repository": "studio-artifakt/artifakt",
+      "default_branch": "main",
+      "profile": "common",
+      "ci": true
+    },
+    {
+      "id": "devkit",
+      "path": "tools/devkit",
+      "repository": null,
+      "default_branch": null,
+      "profile": "common",
+      "ci": false
+    },
+    {
+      "id": "ghost-theme-dope",
+      "path": "tools/ghost-theme-dope",
+      "repository": "C4NU/Dope-Custom",
+      "default_branch": "main",
+      "profile": "common",
+      "ci": false
+    },
+    {
+      "id": "toolkits",
+      "path": "tools/toolkits",
+      "repository": "C4NU/Toolkits",
+      "default_branch": "main",
+      "profile": "common",
+      "ci": false
+    }
+  ]
+}

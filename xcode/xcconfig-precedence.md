@@ -32,18 +32,3 @@ grep -n 'MARKETING_VERSION' <앱>.xcodeproj/project.pbxproj
 
 **재발 방지** — 값이 안 먹으면 계산이나 문법을 의심하기 전에 **같은 키가 pbxproj에
 있는지부터** 본다. Xcode의 Build Settings 화면에서 값 옆의 출처 표시로도 확인할 수 있다.
-
-## 곁들여 — 테스트 타겟은 xcconfig에서 빠져 있곤 하다
-
-2026-09-04 Tappie에서 확인한 것:
-
-```
-Tappie(앱)·위젯·확장     xcconfig 연결 있음 → MARKETING_VERSION 1.2.0
-TappieTests·TappieUITests xcconfig 연결 없음 → pbxproj의 0.2.0
-```
-
-Xcode가 프로젝트를 만들 때 테스트 타겟에 넣은 기본값이 그대로 남은 것이다.
-테스트 타겟은 스토어에 올라가지 않으므로 피해는 없지만, **`pbxproj`의 버전을 보고
-"버전이 밀렸다"고 판단하면 안 된다.** 정본은 xcconfig다.
-
-관련: [[xcode/archive-retention]]
