@@ -1,67 +1,70 @@
-# roadmap — 공통 에이전트 지침 배포
+# roadmap — 공통 지침과 문서 인프라
 
-> G1~G6는 이 계획의 지침 배포 작업 번호다. 사용자 제시안을 현재 파일 구조에 맞춰 개정했다.
-> 별도의 기존 G 계획 파일은 Development와 Obsidian Vault의 Markdown 검색에서 찾지 못했다.
-> 범위: 공통 원본은 knowledge, 개인 전역 지침은 devkit, 제품 규칙은 각 저장소가 소유한다.
+> **M** = 문서 사이트(MkDocs) 작업 번호. 이 저장소 안에서만 쓴다.
+> 끝난 G 지침 배포는 [`archive/roadmap-g-지침배포.md`](archive/roadmap-g-지침배포.md)에 있다.
 
-## G1 공통·앱·로컬 범위 확정
+---
 
-- [ ] 파일 분리를 완료로 간주하지 않고 아래 범위로 원본을 정리한다.
-  - 공통: 작업 원칙·코드·입력 검증·보안·언어·문서 관리·일반 Git 규칙.
-  - 앱: `version/vX.Y.Z`, 새 버전의 번호 증가, Xcode·ASC 규칙. Xcode 규칙은 Apple 대상에만 포함한다.
-  - 로컬 전용: 저장소 지도·Obsidian 연결·Development 심볼릭 링크 설명.
-- [ ] 프로젝트별 버전 정본 표 등 Paddie·Tappie 고유 사실은 각 프로젝트 규칙으로 분리한다.
-- [ ] `instructions/*.md`는 명시적 파일 목록으로 배포한다. 새 파일이 생겼다고 모든 저장소에 자동 포함하지 않는다.
-- [ ] 절을 자동 분리할 경우 backtick·tilde fence와 그 길이를 추적한다. 예시 속 `#`·`##`는 절로 인식하지 않는 테스트를 둔다.
-- [ ] 수락 기준: 앱 규칙이 웹·라이브러리에 강제되지 않고 로컬 지도·개인 절대 경로가 배포 결과에 없다.
+## G 잔여 — 지침 배포를 마무리한다
 
-## G2 저장소 내부 동기화
+- [ ] `SYNC_TOKEN`을 knowledge 시크릿에 넣는다. 이것 없이는 CI가 「대상 받기」에서 실패한다
+      `gh secret set SYNC_TOKEN --repo studio-artifakt/knowledge`
+      fine-grained PAT · 대상 저장소 `contents: write` · `pull-requests: write`
+- [ ] 토큰 설정 후 CI를 한 대상으로 수동 실행해 PR이 열리는지 확인한다 (`workflow_dispatch` · `target: toolkits`)
+- [ ] `docs-template`의 원격 연결을 다시 정한다. 지금 `C4NU/Docs`는 Tappie·Rollie 문서가
+      각 저장소로 옮겨가기 전의 옛 공유 저장소라 로컬 골격과 이력이 갈라져 있다
+- [ ] Codex가 전역 `~/.codex/AGENTS.md`와 저장소 `AGENTS.md`를 합치는지 실제 세션에서 확인한다.
+      블록을 심었으므로 합치지 않아도 규칙은 닿지만, 전역의 역할이 달라진다
 
-- [ ] `knowledge/bin/sync-agents.py`와 대상 manifest를 만든다. manifest에는 로컬 경로·원격 owner/repo·기본 브랜치·포함 프로필·배포 파일을 명시한다.
-- [ ] 대상 `AGENTS.md`의 `<!-- knowledge:begin -->` / `<!-- knowledge:end -->` 안에 짧은 공통 규칙·필요 시 읽기 진입점을 생성한다. 블록 밖 프로젝트 본문은 바이트 단위로 보존한다.
-- [ ] 상세 파일은 대상 `.agent-instructions/knowledge/`에 복사한다. `instructions/`와 필요한 `xcode/` 하위 구조를 유지하고 AGENTS.md의 링크를 저장소 내부 상대 경로로 생성한다.
-- [ ] `instructions/xcode-release.md` → `xcode/xcconfig-precedence.md`처럼 이어지는 참조도 포함한다. 필요한 실제 문서 참조는 모두 같은 저장소 안에서 해결되게 한다. 코드 블록 속 형식 예시는 실제 의존성과 구분한다.
-- [ ] `--check`는 읽기만 수행하고 차이 경로를 보고한다. 일치 0, 어긋남 1, 잘못된 입력·표시 블록·경로 오류 2로 종료한다. 파일·백업·타임스탬프를 생성하지 않는다.
-- [ ] apply는 변경 파일만 고유 백업 후 원자적으로 교체한다. 생성 파일의 소유 목록과 원본 revision/hash를 기록한다. 재실행 결과가 같아야 한다.
-- [ ] 중복·누락·역전 표시 블록, 경로 탈출, 예기치 않은 심볼릭 링크, 소유권 충돌은 해당 대상 쓰기를 중단한다. 무관한 dirty 파일은 보존하고 독립 대상은 계속한다.
-- [ ] 수락 기준: 두 번 apply 후 차이 없음, check 읽기 전용, 프로젝트 본문 보존, Development 밖 임시 복사본의 모든 실제 링크 정상.
+## M 문서 사이트 — 12개 저장소 문서를 한 곳에서 읽는다
 
-## G3 없는 저장소에 진입점 생성
+**왜** — 앱마다 `docs/`를 따로 열어보고 있다. 저장소를 가로지르는 검색이 안 되고,
+markdown 원문은 에이전트에게는 맞지만 사람이 훑기에는 불편하다.
 
-- [ ] tennysn부터 G2를 시험한다. 기존 README·계획·CLAUDE 지침을 확인한 뒤 제품 사실을 추측하지 않고 생성한다.
-- [ ] 아래 8곳의 포함 여부와 프로필을 manifest에 확정하고 순서대로 생성한다. legacy의 활성 동기화 여부도 명시한다.
-- [ ] Claude를 사용할 대상은 `CLAUDE.md`의 `@AGENTS.md` 어댑터를 확인한다. 기존 Claude 전용 본문은 보존한다.
+**무엇** — 같은 파일을 두 갈래로 쓴다. **에이전트는 markdown 원문을, 사람은 사이트를 읽는다.**
+문서를 복사하지 않는다. 사이트는 저장소의 `docs/`를 그대로 읽는 뷰다.
 
-| AGENTS.md 없는 경로 | 조회된 origin |
-|---|---|
-| products/tennysn | C4NU/tennysn |
-| products/hanavi/yearbook | C4NU/yearbook |
-| products/paddie/legacy | C4NU/Paddie |
-| libraries/artifakt-core | studio-artifakt/artifakt-core |
-| tools/toolkits | C4NU/Toolkits |
-| tools/devkit | 없음 |
-| tools/ghost-theme-dope | C4NU/Dope-Custom |
-| templates/docs-template | C4NU/Docs |
+### M1 범위와 배치
 
-## G4 Codex 전역 지침을 devkit으로 관리
+- [ ] 어느 저장소의 `docs/`를 넣을지 정한다. `sync-targets.json`의 16곳이 출발점이지만
+      문서가 없는 저장소는 뺀다
+- [ ] 사이트 저장소 자리를 정한다 — `tools/` 아래 새 저장소가 유력하다
+- [ ] 저장소별 `docs/`를 어떻게 모을지 정한다. 후보 둘
+      - git submodule — 정확하지만 커밋 고정을 계속 올려야 한다
+      - CI가 clone해 빌드 — 항상 최신이지만 빌드가 네트워크에 묶인다
+- [ ] `knowledge/instructions/`를 한 섹션으로 넣는다. 오늘 만든 HTML 한 장이 그 자리를 대신하고 있다
 
-- [ ] 현재 `~/.codex/AGENTS.md`를 출발점으로 devkit 관리 원본을 만든다. 7월 29일의 일반 지침이라는 이전 전제는 폐기한다. 9월 6일에 축약과 Development 조건부 읽기 규칙이 적용됐지만 아직 일반 파일이다.
-- [ ] install/doctor에 백업·심볼릭 링크·동등성 검사를 추가한다. config.toml 등 비소유 파일은 변경하지 않는다.
-- [ ] 전역에는 개인 작업 원칙만 둔다. G2 배포가 완료된 저장소는 로컬 Development 원본을 다시 읽지 않게 하여 이중·낡은 규칙 적용을 막는다.
-- [ ] 미배포 저장소용 조건부 읽기는 과도기로만 유지하고 이식 완료 후 제거한다. 외부 clone의 동작을 전역 파일 존재에 의존시키지 않는다.
+### M2 골격
 
-## G5 기존 저장소 문구 교체
+- [ ] MkDocs Material 도입. `mkdocs.yml` 하나로 시작한다
+- [ ] 한국어 검색이 되는지 먼저 확인한다 — 형태소 분리가 안 되면 검색이 무용지물이다.
+      안 되면 `search.separator` 조정 또는 다른 생성기를 다시 본다
+- [ ] `mkdocs serve`로 로컬 실시간 미리보기. 저장하면 브라우저가 바로 갱신되는지 확인
+- [ ] 네비게이션을 앱별로 가른다. `plan/` · `tech-docs/` · `guide/` 구분이 사이트에서도 보여야 한다
 
-- [ ] G2 블록과 참조 파일이 실제 설치된 대상만 기존 상위 링크 문구를 바꾼다.
-- [ ] 문구: “공통 규칙은 아래 관리 블록에 심어져 있다. 상세 규칙은 이 저장소의 `.agent-instructions/knowledge/`에서 필요할 때 읽는다. 그 밖의 본문은 프로젝트 고유 규칙이다.”
-- [ ] 상대 상위 경로를 읽으라는 문구를 없애고 Codex AGENTS / Claude @AGENTS 경로를 각각 확인한다.
+### M3 배포
 
-## G6 knowledge 변경 시 동기화 PR
+- [ ] Cloudflare Pages에 올린다. **칸반(Phase C)과 같은 스택이라 배관을 두 번 만들지 않는다**
+- [ ] 접근 제어를 정한다. 제품 문서에 미출시 정보와 가격 정책이 있어 공개하면 안 된다.
+      Cloudflare Access 또는 비공개 배포
+- [ ] 문서가 바뀌면 다시 빌드한다. 각 저장소 push → 사이트 빌드 트리거
 
-- [ ] 대상 12개를 manifest로 먼저 확정한다. 현재 products/libraries/tools/templates의 Git 저장소는 16곳(AGENTS 있음 8, 없음 8)이며 12곳의 선택 근거는 미확인이다.
-- [ ] AGENTS.md뿐 아니라 instructions/**, 포함된 참조 문서, manifest, 동기화 스크립트 변경도 CI 트리거에 포함한다.
-- [ ] 원본 CI에서 검증·차이 생성을 먼저 수행하고 대상별 전용 브랜치의 PR만 생성/갱신한다. 자동 merge는 하지 않는다.
-- [ ] source 기본 브랜치 반영 및 수동 실행으로 제한한다. 비신뢰 PR 코드에 쓰기 자격증명을 전달하지 않는다.
-- [ ] 각 원격 저장소에 한정한 GitHub App 또는 토큰 권한을 준비한다. knowledge의 기본 GITHUB_TOKEN만으로 타 저장소에 쓸 수 있다고 가정하지 않는다.
-- [ ] 같은 대상의 열린 동기화 PR은 갱신하고 중복 생성하지 않는다. 대상별 실패를 기록하고 성공한 다른 대상을 되돌리지 않는다.
-- [ ] 수락 기준: 첫 PR diff에 표시 블록·배포 파일만 존재, 대상 CI 통과, 무변경 재실행 시 PR 없음. 원격 활성화는 대상과 권한이 확정된 뒤 진행한다.
+### M4 링크 정합
+
+- [ ] 저장소 안 상대 링크가 사이트에서도 닿는지 확인한다. `tech-docs/`끼리 거는 링크가 많다
+- [ ] `[[wiki 링크]]`가 있으면 상대 링크로 바꾼다. 배포 원본에서는 이미 금지하고 있다
+- [ ] `.agent-instructions/`는 생성물이라 사이트에서 뺀다. 원본이 이미 사이트에 있다
+
+### M5 Obsidian과의 관계 정리
+
+- [ ] `~/Obsidian/Vault/Projects/*`가 이미 각 저장소 `docs/`를 가리키는 심볼릭이다.
+      **사이트와 역할을 가른다** — Vault는 쓰기, 사이트는 읽기
+- [ ] 겹치면 하나를 접는다. 같은 것을 두 곳에서 관리하지 않는다
+
+---
+
+## 판단이 남은 것
+
+- **MkDocs가 맞는지** — Quartz(Obsidian Vault를 그대로 웹으로, 백링크 유지)도 후보다.
+  Vault를 이미 쓰고 있어 붙이기는 더 쉽지만, 저장소를 가로지르는 검색은 MkDocs가 낫다
+- **문서를 모으는 방식** — submodule과 CI clone 중 어느 쪽도 결정하지 않았다
