@@ -49,3 +49,52 @@ severity: high
 
 작업을 시작하기 전에 건드릴 영역의 방을 먼저 훑는다. 특히 `severity: high`는 그 자리에서
 막히는 것들이라 미리 읽는 값이 크다.
+
+---
+
+## 공통 지침 배포
+
+`AGENTS.md`와 `instructions/`는 **다른 저장소로 배포되는 원본**이다.
+각 저장소의 `AGENTS.md`에 관리 블록으로 심기고 참조 문서는 `.agent-instructions/`로 간다.
+
+```
+instructions/common.md    ─┐
+instructions/app.md        ├─ 블록으로 심긴다 (프로필에 따라)
+instructions/apple.md     ─┘
+instructions/documentation.md ─┐
+instructions/xcode-release.md   ├─ .agent-instructions/ 로 배포된다
+xcode/xcconfig-precedence.md   ─┘
+instructions/local-workspace.md  ← 배포하지 않는다 (이 기기 전용)
+```
+
+| 프로필 | 심는 것 | 대상 |
+|---|---|---|
+| `common` | common | 모든 저장소 |
+| `app` | + app | 출시 앱 |
+| `apple` | + apple | Xcode·ASC를 쓰는 앱 |
+
+대상과 프로필은 [`sync-targets.json`](sync-targets.json)에 있다.
+
+```bash
+python3 -m unittest discover          # 22개
+python3 bin/sync-agents.py --validate # 원본·참조 검증
+python3 bin/sync-agents.py --check    # 어긋난 대상만 보고. 쓰지 않는다
+python3 bin/sync-agents.py            # 전체 적용
+python3 bin/sync-agents.py --target tappie
+```
+
+🔴 **각 저장소의 관리 블록과 `.agent-instructions/`는 생성물이다.**
+직접 고치면 다음 동기화가 충돌로 멈춘다. 고칠 것은 여기서 고친다.
+관리 블록 **바깥**의 본문은 그 저장소 고유 규칙이라 동기화가 건드리지 않는다.
+
+### CI
+
+`main`에 지침이 바뀌면 [워크플로](.github/workflows/sync-agents.yml)가 12개 저장소에
+`chore/knowledge-sync` 브랜치로 PR을 연다. 한 저장소가 막혀도 나머지는 계속한다.
+
+🔴 **저장소 시크릿 `SYNC_TOKEN`이 필요하다.** 기본 `GITHUB_TOKEN`은 자기 저장소에만
+쓸 수 있다. 대상 저장소의 `contents: write` · `pull-requests: write` 권한을 가진
+토큰(fine-grained PAT 권장)을 넣는다. 없으면 「대상 받기」 단계에서 실패한다.
+
+`ci: false`인 대상(`devkit` · `ghost-theme-dope` · `toolkits` · `paddie-legacy`)은
+로컬에서 직접 돌린다.
