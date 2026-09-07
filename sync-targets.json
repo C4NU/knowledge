@@ -144,10 +144,10 @@
     {
       "id": "devkit",
       "path": "tools/devkit",
-      "repository": null,
-      "default_branch": null,
+      "repository": "studio-artifakt/devkit",
+      "default_branch": "main",
       "profile": "common",
-      "ci": false
+      "ci": true
     },
     {
       "id": "ghost-theme-dope",
