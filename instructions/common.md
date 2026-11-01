@@ -2,15 +2,15 @@
 
 ## 문서 규칙 — 지켜야 하는 최소
 
-🔴 **할 일은 마크다운이 아니라 Studio Ops 보드에 둔다.** `docs/plan/`의 current·backlog·roadmap·code-review에
-새 항목을 쓰지 않는다. 보드는 MCP 서버 `studio`로 읽고 쓴다(연결: studio-ops `docs/guide/agents.md`).
+🔴 **할 일은 마크다운이 아니라 workprint 보드에 둔다.** `docs/plan/`의 current·backlog·roadmap·code-review에
+새 항목을 쓰지 않는다. 보드는 MCP 서버 `studio`로 읽고 쓴다(연결: workprint 프로젝트 문서 「AI 에이전트 연결」).
 
 | 예전 문서 | 이제 보드에서 |
 |---|---|
 | `current.md` | `in_progress`·`in_review` 카드 |
 | `backlog.md` | 이번 버전 릴리즈에 묶인 `planned`·`backlog` 카드 |
 | `roadmap.md` | 예정 릴리즈 + 아이디어함 |
-| `code-review.md`의 남은 것 | `bug` 카드(라벨 `code-review`). 재현·원인은 `tech-docs/review/` |
+| `code-review.md`의 남은 것 | `bug` 카드(라벨 `코드리뷰`). 재현·원인은 프로젝트 문서 「함정」 |
 
 - 작업을 시작하면 카드를 `in_progress`로, 끝나면 `done`으로 옮긴다(`move_work_item`).
   🔴 **한 번 끝낼 때마다 옮긴다.** 세션이 끝날 때 몰아서 하지 않는다.
@@ -24,12 +24,13 @@
 못한 것(시작·완료·새 할 일)을 끝에 사용자에게 목록으로 알린다.
 
 **기존 `plan/` 파일은 동결한다.** 고치지도 지우지도 않는다 — 보드로 옮긴 뒤 사용자가 `plan/archive/`로 내린다.
-`plan/`에 계속 쓰는 마크다운은 `revenue.md`(상품·가격·권한의 지금 상태)뿐이다.
+상품·가격·권한의 지금 상태는 프로젝트 문서 「BM」에 둔다.
 
-🔴 **`tech-docs/`는 그대로 마크다운이다.** 작업하다 알게 된 함정·원인·되돌릴 수 없는 결정은
-보드 카드가 아니라 `tech-docs/`에 남긴다. 카드 설명에 교훈을 쌓지 않는다.
+🔴 **설계·함정·원인·되돌릴 수 없는 결정의 정본은 workprint 프로젝트 문서다**(`list_pages`·`update_page`, 개발 문서 템플릿 칸).
+카드 설명에 교훈을 쌓지 않는다. 계획은 문서가 아니라 카드다. 아직 옮기지 않은 저장소는 OPS 문서
+「knowledge 문서 이식 절차」대로 옮기고, 그 전까지는 `docs/tech-docs/`에 남긴다.
 
-형식·약어·`tech-docs/` 방 구성이 헷갈리면 [문서 규칙](documentation.md)을 읽는다.
+형식·약어가 헷갈리면 [문서 규칙](documentation.md)을 읽는다.
 단순 오탈자 수정에 무관한 문서를 모두 읽지 않는다.
 
 ## 작업 원칙
@@ -132,13 +133,13 @@
 1. `git status`
 2. 이 파일과 해당 저장소의 `AGENTS.md`
 3. 구현·계획 작업이면 보드에서 이 프로젝트의 `in_progress`·`planned` 카드(`list_work_items`)
-4. 건드릴 영역의 tech-docs 항목을 먼저 찾고 관련 문서만 읽는다
+4. 건드릴 영역의 프로젝트 문서(`list_pages`)를 먼저 찾고 관련 문서만 읽는다
 5. 빌드·테스트 설정
 
 ## 작업 후 확인
 
 1. 보드 갱신 — 끝낸 카드는 `done`, 새로 생긴 할 일은 카드로, 막힌 것은 `blocked`
-2. 알게 된 함정이나 되돌릴 수 없는 결정이 있으면 `docs/tech-docs/<방>/`에 남긴다
+2. 알게 된 함정이나 되돌릴 수 없는 결정이 있으면 프로젝트 문서 해당 칸에 남긴다
 
 ## AI instruction 파일을 고칠 때
 
